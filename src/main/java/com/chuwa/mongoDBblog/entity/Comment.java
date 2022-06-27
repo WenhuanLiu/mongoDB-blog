@@ -4,6 +4,7 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.time.LocalDate;
@@ -26,7 +27,28 @@ public class Comment {
     private String email;
     @Field
     private String body;
+    @Field
+    private long likes;
+    @Field
+    private boolean collect;
 
+    public long getLikes() {
+        return likes;
+    }
+
+    public void setLikes(long likes) {
+        this.likes = likes;
+    }
+
+    public boolean isCollect() {
+        return collect;
+    }
+
+    public void setCollect(boolean collect) {
+        this.collect = collect;
+    }
+
+    @DocumentReference(lazy = true)
     private Post post;
 
     public Post getPost() {
@@ -99,6 +121,8 @@ public class Comment {
     public void setUpdateDateTime(LocalDate updateDateTime) {
         this.updateDateTime = updateDateTime;
     }
+
+
 
     @Override
     public String toString() {
