@@ -1,13 +1,16 @@
 package com.chuwa.mongoDBblog.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.data.mongodb.core.mapping.Field;
+import javax.persistence.*;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 /**
  * @ClassName Comment
@@ -21,34 +24,31 @@ public class Comment {
 
     @Id
     private ObjectId id;
-    @Field
+    @JsonProperty("name")
     private String name;
-    @Field
     private String email;
-    @Field
     private String body;
-    @Field
-    private long likes;
-    @Field
-    private boolean collect;
+//    private long likes;
+//    private boolean collect;
 
-    public long getLikes() {
-        return likes;
-    }
+//    public long getLikes() {
+//        return likes;
+//    }
+//
+//    public void setLikes(long likes) {
+//        this.likes = likes;
+//    }
+//
+//    public boolean isCollect() {
+//        return collect;
+//    }
+//
+//    public void setCollect(boolean collect) {
+//        this.collect = collect;
+//    }
 
-    public void setLikes(long likes) {
-        this.likes = likes;
-    }
-
-    public boolean isCollect() {
-        return collect;
-    }
-
-    public void setCollect(boolean collect) {
-        this.collect = collect;
-    }
-
-    @DocumentReference(lazy = true)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "post_id", nullable = false)
     private Post post;
 
     public Post getPost() {
@@ -133,4 +133,23 @@ public class Comment {
                 ", body='" + body + '\'' +
                 '}';
     }
+    @Override
+    public boolean equals(Object o){
+        if(this == o){
+            return true;
+        }
+        if(!(o instanceof Comment)){
+            return false;
+        }
+        Comment comment = (Comment) o;
+        return getId() == comment.getId() && getName().equals(comment.getName()) && getEmail().equals(comment.getEmail()) && getBody().equals(comment.getBody()) && getPost().equals(comment.getPost()) && getCreateDateTime().equals(comment.getCreateDateTime()) && getUpdateDateTime().equals(comment.getUpdateDateTime());
+
+    }
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getName(), getEmail(), getBody(), getPost(), getCreateDateTime(), getUpdateDateTime());
+    }
+
 }
+
+

@@ -5,6 +5,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
 /**
  * @ClassName Reply
  * @Description TODO
@@ -21,7 +25,8 @@ public class Reply {
     private String name;
     @Field
     private String body;
-    @DocumentReference
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "comment_id", nullable = false)
     private Comment comment;
 
     public Reply() {

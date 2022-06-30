@@ -2,6 +2,12 @@ package com.chuwa.mongoDBblog.payload;
 
 import org.bson.types.ObjectId;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
+import java.util.Objects;
+
+
 /**
  * @ClassName CommentDto
  * @Description TODO
@@ -12,8 +18,14 @@ import org.bson.types.ObjectId;
 public class CommentDto {
 
     private ObjectId id;
+
+    @NotEmpty(message = "Name should not be null or empty")
     private String name;
+    @NotEmpty(message = "email should not be null or empty")
+    @Email
     private String email;
+    @NotEmpty
+    @Size(min = 5, message = "Comment body must be minimum 5 characters")
     private String body;
 
     public CommentDto() {
@@ -66,5 +78,22 @@ public class CommentDto {
                 ", email='" + email + '\'' +
                 ", body='" + body + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof CommentDto)) {
+            return false;
+        }
+        CommentDto that = (CommentDto) o;
+        return getId() == that.getId() && getName().equals(that.getName()) && getEmail().equals(that.getEmail()) && getBody().equals(that.getBody());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getName(), getEmail(), getBody());
     }
 }

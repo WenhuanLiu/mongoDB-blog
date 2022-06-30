@@ -4,9 +4,14 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import javax.persistence.CascadeType;
+import javax.persistence.OneToMany;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @ClassName Post
@@ -27,6 +32,8 @@ public class Post {
     private String description;
     @Field
     private String content;
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Comment> comments = new HashSet<>();
 
     @CreatedDate
     private LocalDate creatDatetime;
@@ -74,6 +81,14 @@ public class Post {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public Set<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(Set<Comment> comments) {
+        this.comments = comments;
     }
 
     public LocalDate getCreatDatetime() {
